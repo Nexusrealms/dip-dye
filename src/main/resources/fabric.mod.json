@@ -3,15 +3,15 @@
 	"id": "dip-dye",
 	"version": "${version}",
 	"name": "Dip Dye",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Simple dyeing in cauldrons",
 	"authors": [
-		"Me!"
+		"Farpo"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/dip-dye/icon.png",
 	"environment": "*",
 	"entrypoints": {
