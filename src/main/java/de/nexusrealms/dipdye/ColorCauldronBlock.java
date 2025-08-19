@@ -67,7 +67,14 @@ public class ColorCauldronBlock extends LeveledCauldronBlock implements BlockEnt
                 }
                 return ActionResult.SUCCESS_SERVER;
             } else if (stack.getItem() instanceof DyeItem) {
-                colorCauldronBlockEntity.processAddedStack(stack, !player.isInCreativeMode());
+                colorCauldronBlockEntity.processDyeStack(stack, !player.isInCreativeMode());
+                return ActionResult.SUCCESS_SERVER;
+            } else if(stack.getItem() instanceof ColorDropperItem colorDropperItem) {
+                colorCauldronBlockEntity.processAdditiveStack(colorDropperItem);
+                if(!player.isCreative()) {
+                    stack.decrement(1);
+                    player.giveItemStack(colorDropperItem.getRecipeRemainder());
+                }
                 return ActionResult.SUCCESS_SERVER;
             }
         }

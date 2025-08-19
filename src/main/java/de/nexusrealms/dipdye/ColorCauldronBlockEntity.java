@@ -2,7 +2,6 @@ package de.nexusrealms.dipdye;
 
 import de.nexusrealms.dipdye.api.CauldronDipApi;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,6 +20,7 @@ import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -106,7 +106,7 @@ public class ColorCauldronBlockEntity extends BlockEntity {
         return stack1;
     }
     //TODO better sounds
-    public void processAddedStack(ItemStack stack, boolean decrement){
+    public void processDyeStack(ItemStack stack, boolean decrement){
         if(stack.getItem() instanceof DyeItem dyeItem){
             if(!world.isClient){
                 if(decrement) stack.decrement(1);
@@ -116,6 +116,21 @@ public class ColorCauldronBlockEntity extends BlockEntity {
             dyes.add(dyeItem);
             updateListeners();
         }
+    }
+    public void processAdditiveStack(ColorDropperItem colorDropperItem){
+        additive = true;
+        world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        world.emitGameEvent(null, GameEvent.FLUID_PLACE, pos);
+        if(colorDropperItem.addsRed()){
+            additiveRed = MathHelper.clamp(0, additiveRed + colorDropperItem.getSize(), 255);
+        }
+        if(colorDropperItem.addsGreen()){
+            additiveGreen = MathHelper.clamp(0, additiveGreen + colorDropperItem.getSize(), 255);
+        }
+        if(colorDropperItem.addsBlue()){
+            additiveBlue = MathHelper.clamp(0, additiveBlue + colorDropperItem.getSize(), 255);
+        }
+        updateListeners();
     }
     @Override
     protected void writeData(WriteView view) {

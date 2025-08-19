@@ -2,6 +2,7 @@ package de.nexusrealms.dipdye.mixin;
 
 import de.nexusrealms.dipdye.ColorCauldronBlockEntity;
 import de.nexusrealms.dipdye.DipDye;
+import de.nexusrealms.dipdye.ColorDropperItem;
 import net.minecraft.block.AbstractCauldronBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeveledCauldronBlock;
@@ -25,12 +26,18 @@ public class AbstractCauldronBlockMixin {
 	@Inject(at = @At("HEAD"), method = "onUseWithItem", cancellable = true)
 	private void turnToColorCauldron(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
 		if(Registries.BLOCK.getId((AbstractCauldronBlock) (Object) this).equals(Identifier.of("water_cauldron"))){
-			if(stack.getItem() instanceof DyeItem && state.get(LeveledCauldronBlock.LEVEL) > 0){
+			if((stack.getItem() instanceof DyeItem || stack.getItem() instanceof ColorDropperItem) && state.get(LeveledCauldronBlock.LEVEL) > 0){
 				BlockState newState = DipDye.COLOR_CAULDRON.getStateWithProperties(state);
 				world.setBlockState(pos, newState);
 				if (world.getBlockEntity(pos) instanceof ColorCauldronBlockEntity colorCauldronBlockEntity) {
 					if (stack.getItem() instanceof DyeItem) {
-						colorCauldronBlockEntity.processAddedStack(stack, !player.isInCreativeMode());
+						colorCauldronBlockEntity.processDyeStack(stack, !player.isInCreativeMode());
+					} else if(stack.getItem() instanceof ColorDropperItem colorDropperItem) {
+						colorCauldronBlockEntity.processAdditiveStack(colorDropperItem);
+						if(!player.isCreative()) {
+							stack.decrement(1);
+							player.giveItemStack(colorDropperItem.getRecipeRemainder());
+						}
 					}
 					cir.setReturnValue(ActionResult.SUCCESS);
 				} else {
