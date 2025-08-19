@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "de.nexusrealms.dipdye.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+      "AbstractCauldronBlockMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
