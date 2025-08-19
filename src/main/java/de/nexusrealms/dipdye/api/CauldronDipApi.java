@@ -18,9 +18,9 @@ public interface CauldronDipApi {
         int l = 0;
         int m = 0;
         if (dyedColorComponent != null) {
-            int n = ColorHelper.getRed(dyedColorComponent.rgb());
-            int o = ColorHelper.getGreen(dyedColorComponent.rgb());
-            int p = ColorHelper.getBlue(dyedColorComponent.rgb());
+            int n = ColorHelper.Argb.getRed(dyedColorComponent.rgb());
+            int o = ColorHelper.Argb.getGreen(dyedColorComponent.rgb());
+            int p = ColorHelper.Argb.getBlue(dyedColorComponent.rgb());
             l += Math.max(n, Math.max(o, p));
             i += n;
             j += o;
@@ -30,9 +30,9 @@ public interface CauldronDipApi {
 
         for(DyeItem dyeItem : dyes) {
             int p = dyeItem.getColor().getEntityColor();
-            int q = ColorHelper.getRed(p);
-            int r = ColorHelper.getGreen(p);
-            int s = ColorHelper.getBlue(p);
+            int q = ColorHelper.Argb.getRed(p);
+            int r = ColorHelper.Argb.getGreen(p);
+            int s = ColorHelper.Argb.getBlue(p);
             l += Math.max(q, Math.max(r, s));
             i += q;
             j += r;
@@ -48,7 +48,7 @@ public interface CauldronDipApi {
         n = (int)((float)n * f / g);
         o = (int)((float)o * f / g);
         p = (int)((float)p * f / g);
-        return ColorHelper.getArgb(0, n, o, p);
+        return ColorHelper.Argb.getArgb(0, n, o, p);
     }
     static boolean register(Item item, CauldronDipCallback callback){
         return DipDye.getDipHandler().register(item, callback);

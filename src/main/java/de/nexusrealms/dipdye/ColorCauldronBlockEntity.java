@@ -9,6 +9,8 @@ import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
@@ -16,8 +18,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
@@ -50,7 +51,7 @@ public class ColorCauldronBlockEntity extends BlockEntity {
         }
     }
     public int getAdditiveColor(){
-        return ColorHelper.getArgb(additiveRed, additiveGreen, additiveBlue);
+        return ColorHelper.Argb.getArgb(additiveRed, additiveGreen, additiveBlue);
     }
     public int getRenderedColor(){
         if(additive){
@@ -69,18 +70,18 @@ public class ColorCauldronBlockEntity extends BlockEntity {
     public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registries) {
         return this.createNbt(registries);
     }
+
     @Override
-    protected void readData(ReadView view) {
-        additive = view.getBoolean("additive", false);
-        if(additive){
-            additiveRed = view.getInt("additiveRed", 0);
-            additiveGreen = view.getInt("additiveGreen", 0);
-            additiveBlue = view.getInt("additiveBlue", 0);
-        } else {
-            dyes = view.read("dyes", Registries.ITEM.getCodec().listOf()
-                    .xmap(ArrayList::new, Function.identity())).orElseGet(ArrayList::new);
-        }
+    protected void readNbt(NbtCompound view, RegistryWrapper.WrapperLookup registryLookup) {
+        additive = view.getBoolean("additive");
+        additiveRed = view.getInt("additiveRed");
+        additiveGreen = view.getInt("additiveGreen");
+        additiveBlue = view.getInt("additiveBlue");
+        dyes = Registries.ITEM.getCodec().listOf()
+                .xmap(ArrayList::new, Function.identity()).parse(registryLookup.getOps(NbtOps.INSTANCE), view.getList("dyes", NbtElement.STRING_TYPE)).getOrThrow();
+
     }
+
     private void updateListeners() {
         this.markDirty();
         this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), 3);
@@ -132,16 +133,13 @@ public class ColorCauldronBlockEntity extends BlockEntity {
         }
         updateListeners();
     }
-    @Override
-    protected void writeData(WriteView view) {
-        view.putBoolean("additive", additive);
-        if(additive){
-            view.putInt("additiveRed", additiveRed);
-            view.putInt("additiveGreen", additiveGreen);
-            view.putInt("additiveBlue", additiveBlue);
-        } else {
-            view.put("dyes", Registries.ITEM.getCodec().listOf(), dyes);
-        }
-    }
 
+    @Override
+    protected void writeNbt(NbtCompound view, RegistryWrapper.WrapperLookup registryLookup) {
+        view.putBoolean("additive", additive);
+        view.putInt("additiveRed", additiveRed);
+        view.putInt("additiveGreen", additiveGreen);
+        view.putInt("additiveBlue", additiveBlue);
+        view.put("dyes",  Registries.ITEM.getCodec().listOf().encodeStart(registryLookup.getOps(NbtOps.INSTANCE), dyes).getOrThrow());
+    }
 }

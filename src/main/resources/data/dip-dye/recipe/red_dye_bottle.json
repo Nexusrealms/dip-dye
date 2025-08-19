@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "minecraft:red_dye",
-    "minecraft:glass_bottle"
+    {
+      "item": "minecraft:red_dye"
+    },
+    {
+      "item": "minecraft:glass_bottle"
+    }
   ],
   "result": {
     "count": 1,

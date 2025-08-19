@@ -38,12 +38,12 @@ public class DipDye implements ModInitializer {
 
 	private static final Identifier COLOR_CAULDRON_KEY = id("color_cauldron");
 
-	public static final Block COLOR_CAULDRON = new ColorCauldronBlock(Biome.Precipitation.NONE, AbstractBlock.Settings.copy(Blocks.WATER_CAULDRON).registryKey(RegistryKey.of(RegistryKeys.BLOCK, COLOR_CAULDRON_KEY)));
+	public static final Block COLOR_CAULDRON = new ColorCauldronBlock(Biome.Precipitation.NONE, AbstractBlock.Settings.copy(Blocks.WATER_CAULDRON));
 	public static final BlockEntityType<ColorCauldronBlockEntity> COLOR_CAULDRON_ENTITY = FabricBlockEntityTypeBuilder.create(ColorCauldronBlockEntity::new, COLOR_CAULDRON).build();
 
 	private static final CauldronDipHandler DIP_HANDLER = new CauldronDipHandler();
 	private static final RegistryKey<Item> VIAL_KEY = RegistryKey.of(RegistryKeys.ITEM, id("glass_vial"));
-	public static final Item VIAL = new Item(new Item.Settings().registryKey(VIAL_KEY));
+	public static final Item VIAL = new Item(new Item.Settings());
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -66,9 +66,9 @@ public class DipDye implements ModInitializer {
 
 	private void registerPipettes(String colorName, byte rgb){
 		RegistryKey<Item> bottleKey = RegistryKey.of(RegistryKeys.ITEM, id(colorName + "_dye_bottle"));
-		Item bottle = Registry.register(Registries.ITEM, bottleKey, new ColorDropperItem(new Item.Settings().recipeRemainder(Items.GLASS_BOTTLE).registryKey(bottleKey), rgb, 16));
+		Item bottle = Registry.register(Registries.ITEM, bottleKey, new ColorDropperItem(new Item.Settings().recipeRemainder(Items.GLASS_BOTTLE), rgb, 16));
 		RegistryKey<Item> vialKey = RegistryKey.of(RegistryKeys.ITEM, id(colorName + "_vial"));
-		Item pipette = Registry.register(Registries.ITEM, vialKey, new ColorDropperItem(new Item.Settings().recipeRemainder(VIAL).registryKey(vialKey), rgb, 1));
+		Item pipette = Registry.register(Registries.ITEM, vialKey, new ColorDropperItem(new Item.Settings().recipeRemainder(VIAL), rgb, 1));
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {
 			entries.add(bottle);
 			entries.add(pipette);

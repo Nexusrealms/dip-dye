@@ -13,6 +13,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AbstractCauldronBlock.class)
 public class AbstractCauldronBlockMixin {
 	@Inject(at = @At("HEAD"), method = "onUseWithItem", cancellable = true)
-	private void turnToColorCauldron(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
+	private void turnToColorCauldron(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ItemActionResult> cir) {
 		if(Registries.BLOCK.getId((AbstractCauldronBlock) (Object) this).equals(Identifier.of("water_cauldron"))){
 			if((stack.getItem() instanceof DyeItem || stack.getItem() instanceof ColorDropperItem) && state.get(LeveledCauldronBlock.LEVEL) > 0){
 				BlockState newState = DipDye.COLOR_CAULDRON.getStateWithProperties(state);
@@ -36,12 +37,12 @@ public class AbstractCauldronBlockMixin {
 						colorCauldronBlockEntity.processAdditiveStack(colorDropperItem);
 						if(!player.isCreative()) {
 							stack.decrement(1);
-							player.giveItemStack(colorDropperItem.getRecipeRemainder());
+							player.giveItemStack(colorDropperItem.getRecipeRemainder().getDefaultStack());
 						}
 					}
-					cir.setReturnValue(ActionResult.SUCCESS);
+					cir.setReturnValue(ItemActionResult.SUCCESS);
 				} else {
-					cir.setReturnValue(ActionResult.PASS);
+					cir.setReturnValue(ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);
 				}
 			}
 		}

@@ -25,7 +25,7 @@ public class CauldronDipHandler {
             return MAP.get(stack.getItem()).dip(stack, blockEntity, player);
         } else if (stack.isIn(ItemTags.DYEABLE)){
             if(blockEntity.isAdditive()){
-                stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(blockEntity.getAdditiveColor()));
+                stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(blockEntity.getAdditiveColor(), true));
             } else {
                 return DyedColorComponent.setColor(stack, blockEntity.getDyes());
             }

@@ -13,6 +13,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.Util;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -43,9 +44,9 @@ public class ColorCauldronBlock extends LeveledCauldronBlock implements BlockEnt
                     world.emitGameEvent(null, GameEvent.FLUID_PLACE, pos);
                 }
 
-                return ActionResult.SUCCESS;
+                return ItemActionResult.SUCCESS;
             } else {
-                return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
+                return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             }
         });
         map.put(Items.BUCKET, (state, world, pos, player, hand, stack) -> CauldronBehavior.emptyCauldron(state, world, pos, player, hand, stack, new ItemStack(Items.WATER_BUCKET), (statex) -> statex.get(LeveledCauldronBlock.LEVEL) == 3, SoundEvents.ITEM_BUCKET_FILL));
@@ -57,25 +58,25 @@ public class ColorCauldronBlock extends LeveledCauldronBlock implements BlockEnt
     }
 
     @Override
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.getBlockEntity(pos) instanceof ColorCauldronBlockEntity colorCauldronBlockEntity) {
             if (stack.isIn(DipDye.CAULDRON_DIPPABLE)) {
                 if(!world.isClient){
                     ItemStack stack1 = colorCauldronBlockEntity.processDippedStack(stack, player);
                     player.setStackInHand(hand, stack1);
-                    player.getItemCooldownManager().set(stack1, 40);
+                    player.getItemCooldownManager().set(stack1.getItem(), 40);
                 }
-                return ActionResult.SUCCESS_SERVER;
+                return ItemActionResult.SUCCESS;
             } else if (stack.getItem() instanceof DyeItem) {
                 colorCauldronBlockEntity.processDyeStack(stack, !player.isInCreativeMode());
-                return ActionResult.SUCCESS_SERVER;
+                return ItemActionResult.SUCCESS;
             } else if(stack.getItem() instanceof ColorDropperItem colorDropperItem) {
                 colorCauldronBlockEntity.processAdditiveStack(colorDropperItem);
                 if(!player.isCreative()) {
                     stack.decrement(1);
-                    player.giveItemStack(colorDropperItem.getRecipeRemainder());
+                    player.giveItemStack(colorDropperItem.getRecipeRemainder().getDefaultStack());
                 }
-                return ActionResult.SUCCESS_SERVER;
+                return ItemActionResult.SUCCESS;
             }
         }
         return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
