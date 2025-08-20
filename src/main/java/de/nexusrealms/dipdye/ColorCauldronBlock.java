@@ -61,7 +61,7 @@ public class ColorCauldronBlock extends LeveledCauldronBlock implements BlockEnt
         if (world.getBlockEntity(pos) instanceof ColorCauldronBlockEntity colorCauldronBlockEntity) {
             if (stack.isIn(DipDye.CAULDRON_DIPPABLE)) {
                 if(!world.isClient){
-                    ItemStack stack1 = colorCauldronBlockEntity.processDippedStack(stack, player);
+                    ItemStack stack1 = colorCauldronBlockEntity.processDippedStack(stack, player, hand);
                     player.setStackInHand(hand, stack1);
                     player.getItemCooldownManager().set(stack1, 40);
                 }

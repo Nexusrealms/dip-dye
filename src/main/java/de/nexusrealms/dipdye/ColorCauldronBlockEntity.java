@@ -18,6 +18,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
@@ -98,8 +99,8 @@ public class ColorCauldronBlockEntity extends BlockEntity {
         }
     }
     //TODO better sounds
-    public ItemStack processDippedStack(ItemStack stack, PlayerEntity player){
-        ItemStack stack1 = DipDye.getDipHandler().dip(stack, this, player);
+    public ItemStack processDippedStack(ItemStack stack, PlayerEntity player, Hand hand){
+        ItemStack stack1 = DipDye.getDipHandler().dip(stack, this, player, hand);
         decreaseLevel();
         world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
         world.emitGameEvent(null, GameEvent.FLUID_PICKUP, pos);

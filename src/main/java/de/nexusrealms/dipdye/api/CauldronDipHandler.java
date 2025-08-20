@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.util.Hand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,9 +21,9 @@ public class CauldronDipHandler {
         MAP.put(item, callback);
         return true;
     }
-    public ItemStack dip(ItemStack stack, ColorCauldronBlockEntity blockEntity, PlayerEntity player){
+    public ItemStack dip(ItemStack stack, ColorCauldronBlockEntity blockEntity, PlayerEntity player, Hand hand){
         if(MAP.containsKey(stack.getItem())){
-            return MAP.get(stack.getItem()).dip(stack, blockEntity, player);
+            return MAP.get(stack.getItem()).dip(stack, blockEntity, player, hand);
         } else if (stack.isIn(ItemTags.DYEABLE)){
             if(blockEntity.isAdditive()){
                 stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(blockEntity.getAdditiveColor()));
