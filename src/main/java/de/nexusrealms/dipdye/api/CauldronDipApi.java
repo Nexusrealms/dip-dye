@@ -5,6 +5,8 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.math.ColorHelper;
 
 import java.util.List;
@@ -49,6 +51,15 @@ public interface CauldronDipApi {
         o = (int)((float)o * f / g);
         p = (int)((float)p * f / g);
         return ColorHelper.getArgb(0, n, o, p);
+    }
+    static ItemStack setColorWithoutCopying(ItemStack stack, List<DyeItem> dyes) {
+        if (!stack.isIn(ItemTags.DYEABLE)) {
+            return ItemStack.EMPTY;
+        } else {
+            DyedColorComponent dyedColorComponent = stack.get(DataComponentTypes.DYED_COLOR);
+            stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(getColorFromDyes(dyes, dyedColorComponent)));
+            return stack;
+        }
     }
     static boolean register(Item item, CauldronDipCallback callback){
         return DipDye.getDipHandler().register(item, callback);

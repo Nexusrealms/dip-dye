@@ -28,7 +28,7 @@ public class CauldronDipHandler {
             if(blockEntity.isAdditive()){
                 stack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(blockEntity.getAdditiveColor()));
             } else {
-                return DyedColorComponent.setColor(stack, blockEntity.getDyes());
+                return CauldronDipApi.setColorWithoutCopying(stack, blockEntity.getDyes());
             }
         }
         return stack;
