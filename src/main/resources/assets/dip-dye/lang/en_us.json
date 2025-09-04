@@ -3,7 +3,12 @@
   "item.dip-dye.red_vial": "Red Dye Vial",
   "item.dip-dye.green_vial": "Green Dye Vial",
   "item.dip-dye.blue_vial": "Blue Dye Vial",
+  "item.dip-dye.white_vial": "White Dye Vial",
+  "item.dip-dye.black_vial": "Black Dye Vial",
   "item.dip-dye.red_dye_bottle": "Red Dye Bottle",
   "item.dip-dye.green_dye_bottle": "Green Dye Bottle",
-  "item.dip-dye.blue_dye_bottle": "Blue Dye Bottle"
+  "item.dip-dye.blue_dye_bottle": "Blue Dye Bottle",
+  "item.dip-dye.white_dye_bottle": "White Dye Bottle",
+  "item.dip-dye.black_dye_bottle": "Black Dye Bottle"
+
 }

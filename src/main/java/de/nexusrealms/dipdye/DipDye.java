@@ -60,6 +60,8 @@ public class DipDye implements ModInitializer {
 		registerPipettes("red", (byte) 0b001);
 		registerPipettes("green", (byte) 0b010);
 		registerPipettes("blue", (byte) 0b100);
+		registerPipettes("white", (byte) 0b111);
+		registerAntiPipettes("black", (byte) 0b111);
 
 		DipDyeNetwork.init();
 	}
@@ -72,6 +74,16 @@ public class DipDye implements ModInitializer {
 		Item bottle = Registry.register(Registries.ITEM, bottleKey, new ColorDropperItem(new Item.Settings().recipeRemainder(Items.GLASS_BOTTLE).registryKey(bottleKey), rgb, 16));
 		RegistryKey<Item> vialKey = RegistryKey.of(RegistryKeys.ITEM, id(colorName + "_vial"));
 		Item pipette = Registry.register(Registries.ITEM, vialKey, new ColorDropperItem(new Item.Settings().recipeRemainder(VIAL).registryKey(vialKey), rgb, 1));
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {
+			entries.add(bottle);
+			entries.add(pipette);
+		});
+	}
+	private void registerAntiPipettes(String colorName, byte rgb){
+		RegistryKey<Item> bottleKey = RegistryKey.of(RegistryKeys.ITEM, id(colorName + "_dye_bottle"));
+		Item bottle = Registry.register(Registries.ITEM, bottleKey, new ColorDropperItem(new Item.Settings().recipeRemainder(Items.GLASS_BOTTLE).registryKey(bottleKey), rgb, -16));
+		RegistryKey<Item> vialKey = RegistryKey.of(RegistryKeys.ITEM, id(colorName + "_vial"));
+		Item pipette = Registry.register(Registries.ITEM, vialKey, new ColorDropperItem(new Item.Settings().recipeRemainder(VIAL).registryKey(vialKey), rgb, -1));
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {
 			entries.add(bottle);
 			entries.add(pipette);

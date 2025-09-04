@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:black_dye",
+    "dip-dye:glass_vial"
+  ],
+  "result": {
+    "count": 1,
+    "id": "dip-dye:black_vial"
+  }
+}
