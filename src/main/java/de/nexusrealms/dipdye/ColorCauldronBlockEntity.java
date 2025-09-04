@@ -1,6 +1,7 @@
 package de.nexusrealms.dipdye;
 
 import de.nexusrealms.dipdye.api.CauldronDipApi;
+import de.nexusrealms.dipdye.network.UpdateCauldronPacket;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -11,9 +12,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.common.CustomPayloadS2CPacket;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.storage.ReadView;
@@ -85,6 +88,9 @@ public class ColorCauldronBlockEntity extends BlockEntity {
     private void updateListeners() {
         this.markDirty();
         this.getWorld().updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), 3);
+        if(getWorld() instanceof ServerWorld world) {
+            world.getServer().getPlayerManager().sendToAround(null, getPos().getX(), getPos().getY(), getPos().getZ(), 64, world.getRegistryKey(), new CustomPayloadS2CPacket(new UpdateCauldronPacket(getPos())));
+        }
     }
     public void decreaseLevel(){
         LeveledCauldronBlock.decrementFluidLevel(world.getBlockState(pos), getWorld(), pos);

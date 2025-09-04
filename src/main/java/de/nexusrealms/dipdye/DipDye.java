@@ -1,6 +1,7 @@
 package de.nexusrealms.dipdye;
 
 import de.nexusrealms.dipdye.api.CauldronDipHandler;
+import de.nexusrealms.dipdye.network.DipDyeNetwork;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -59,6 +60,8 @@ public class DipDye implements ModInitializer {
 		registerPipettes("red", (byte) 0b001);
 		registerPipettes("green", (byte) 0b010);
 		registerPipettes("blue", (byte) 0b100);
+
+		DipDyeNetwork.init();
 	}
 	public static CauldronDipHandler getDipHandler(){
 		return DIP_HANDLER;
