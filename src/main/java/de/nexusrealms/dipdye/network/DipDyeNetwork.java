@@ -12,9 +12,8 @@ import net.minecraft.network.packet.CustomPayload;
 public class DipDyeNetwork {
     public static void init(){
         initC2S();
-        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
-            initS2C();
-        }
+        initS2C();
+
     }
     private static void initS2C(){
         registerClientReceiverPacket(UpdateCauldronPacket.ID, UpdateCauldronPacket.PACKET_CODEC);
@@ -25,7 +24,7 @@ public class DipDyeNetwork {
 
     private static <T extends ReceiverPacket<ClientPlayNetworking.Context>> void registerClientReceiverPacket(CustomPayload.Id<T> packetId, PacketCodec<? super RegistryByteBuf, T> packetCodec){
         PayloadTypeRegistry.playS2C().register(packetId, packetCodec);
-        ClientPlayNetworking.registerGlobalReceiver(packetId, ReceiverPacket::receive);
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) ClientPlayNetworking.registerGlobalReceiver(packetId, ReceiverPacket::receive);
     }
     private static <T extends ReceiverPacket<ServerPlayNetworking.Context>> void registerServerReceiverPacket(CustomPayload.Id<T> packetId, PacketCodec<? super RegistryByteBuf, T> packetCodec){
         PayloadTypeRegistry.playC2S().register(packetId, packetCodec);
