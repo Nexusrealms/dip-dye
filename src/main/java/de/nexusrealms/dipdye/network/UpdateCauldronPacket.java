@@ -15,7 +15,7 @@ public record UpdateCauldronPacket(BlockPos pos) implements ReceiverPacket<Clien
     public static final PacketCodec<ByteBuf, UpdateCauldronPacket> PACKET_CODEC = BlockPos.PACKET_CODEC.xmap(UpdateCauldronPacket::new, UpdateCauldronPacket::pos);
     @Override
     public void receive(ClientPlayNetworking.Context context) {
-        context.player().clientWorld.updateListeners(pos, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), 3);
+        context.player().getEntityWorld().updateListeners(pos, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), 3);
     }
 
     @Override

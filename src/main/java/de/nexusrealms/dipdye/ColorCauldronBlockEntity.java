@@ -115,7 +115,7 @@ public class ColorCauldronBlockEntity extends BlockEntity {
     //TODO better sounds
     public void processDyeStack(ItemStack stack, boolean decrement){
         if(stack.getItem() instanceof DyeItem dyeItem){
-            if(!world.isClient){
+            if(!world.isClient()){
                 if(decrement) stack.decrement(1);
                 world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 world.emitGameEvent(null, GameEvent.FLUID_PLACE, pos);

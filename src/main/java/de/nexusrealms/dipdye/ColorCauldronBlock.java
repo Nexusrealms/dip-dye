@@ -31,7 +31,7 @@ public class ColorCauldronBlock extends LeveledCauldronBlock implements BlockEnt
         map.put(Items.POTION, (state, world, pos, player, hand, stack) -> {
             PotionContentsComponent potionContentsComponent = stack.get(DataComponentTypes.POTION_CONTENTS);
             if (potionContentsComponent != null && potionContentsComponent.matches(Potions.WATER)) {
-                if (!world.isClient) {
+                if (!world.isClient()) {
                     Item item = stack.getItem();
                     player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
                     player.incrementStat(Stats.USE_CAULDRON);
@@ -60,7 +60,7 @@ public class ColorCauldronBlock extends LeveledCauldronBlock implements BlockEnt
     protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.getBlockEntity(pos) instanceof ColorCauldronBlockEntity colorCauldronBlockEntity) {
             if (stack.isIn(DipDye.CAULDRON_DIPPABLE)) {
-                if(!world.isClient){
+                if(!world.isClient()){
                     ItemStack stack1 = colorCauldronBlockEntity.processDippedStack(stack, player, hand);
                     player.setStackInHand(hand, stack1);
                     player.getItemCooldownManager().set(stack1, 40);
